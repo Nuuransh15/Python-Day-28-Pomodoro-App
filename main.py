@@ -38,6 +38,9 @@ def reset_timer():
     canvas.itemconfig(timer_text, text=CLOCK_START)
     check_mark_label.config(text="")
 
+    # Enable the start button once the application is reset
+    start_button.config(state=NORMAL)
+
 
 # ---------------------------- TIMER MECHANISM ------------------------------- #
 def start_timer():
@@ -46,6 +49,9 @@ def start_timer():
     This function is also called if the 'Start' button is clicked.
     :return: None
     """
+    # Disable the start button to prevent unintended behaviour
+    start_button.config(state=DISABLED)
+
     global reps
     reps += 1
     if reps % 8 == 0:
