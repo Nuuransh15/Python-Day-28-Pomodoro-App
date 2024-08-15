@@ -23,10 +23,13 @@ MS_IN_S = 1000
 reps = 0
 timer = None
 
-# ---------------------------- TIMER RESET ------------------------------- # 
 
-
+# ---------------------------- TIMER RESET ------------------------------- #
 def reset_timer():
+    """
+    Function to reset the timer back to its initial state once the 'Reset' button is clicked.
+    :return: None
+    """
     global reps, timer
 
     window.after_cancel(timer)
@@ -36,10 +39,13 @@ def reset_timer():
     check_mark_label.config(text="")
 
 
-# ---------------------------- TIMER MECHANISM ------------------------------- # 
-
-
+# ---------------------------- TIMER MECHANISM ------------------------------- #
 def start_timer():
+    """
+    Function to start the timer once a work or break repetition is complete.
+    This function is also called if the 'Start' button is clicked.
+    :return: None
+    """
     global reps
     reps += 1
     if reps % 8 == 0:
@@ -53,10 +59,14 @@ def start_timer():
         title_label.config(text="Work", fg=GREEN)
 
 
-# ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
-
-
-def count_down(count):
+# ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
+def count_down(count: int):
+    """
+    Function to decrease the number of seconds depending on whether the user is working or on a break. The
+    value is then expressed in the GUI as "Minutes:Seconds" (e.g. 25:00).
+    :param count: The number of seconds remaining in the repetition cycle.
+    :return: None
+    """
     global reps
     mins_left = count // SECONDS_IN_MIN
     secs_left = count % SECONDS_IN_MIN
@@ -65,16 +75,18 @@ def count_down(count):
         secs_left = "0" + str(secs_left)
     canvas.itemconfig(timer_text, text=f"{mins_left}:{secs_left}")
     if count > 0:
+        # invoke the count-down function after a delay of 1 second with 1 less second left in the count
         global timer
         timer = window.after(MS_IN_S, count_down, count - 1)
     else:
+        # restart the timer after the repetition cycle completes
         start_timer()
         work_sessions = reps // 2
+
+        # number of work cycles completed indicated as check marks
         for _ in range(work_sessions):
             new_text = CHECK_MARK * work_sessions
             check_mark_label.config(text=new_text)
-
-
 
 
 # ---------------------------- UI SETUP ------------------------------- #
